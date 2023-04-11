@@ -1,50 +1,47 @@
 import openai
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template_string, render_template
+import PyPDF2
 
 app = Flask(__name__)
 openai.api_key = "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"
+model_engine = 'text-davinci-002'
 
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        # Check if file is uploaded
+        if 'pdf_file' not in request.files:
+            return "No file found", 400
 
-@app.route('/', methods=['POST'])
-def upload():
-    file = request.files['file']
-    text = extract_text(file)
-    summary = summarize_text(text)
-    return render_template('home.html', summary=summary)
+        pdf_file = request.files['pdf_file']
 
-def extract_text(file):
-    """Extract text from a file."""
-    # Assumes the file is a PDF
-    text = ""
-    with openai.file(file.stream, content_type='application/pdf') as f:
-        pdf = openai.Compression.gzip_decompress(f.read())
-        text = openai.FormattedText(pdf).plain_text()
-    return text
+        # Check if file is PDF
+        if not pdf_file.filename.endswith('.pdf'):
+            return "Invalid file format. Please upload a PDF file.", 400
 
-def summarize_text(text):
-    """Summarize text using OpenAI GPT-3 API."""
-    prompt = (f"Please summarize the following text into 5 sentences:\n\n{text}\n\nSummary:")
-    response = openai.Completion.create(
-        engine="davinci",
-        prompt=prompt,
-        temperature=0.5,
-        max_tokens=100,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    summary = response.choices[0].text.strip()
-    return summary
+        # Read PDF file and extract text
+        pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+        text = ''
+        for page_num in range(pdf_reader.numPages):
+            page = pdf_reader.getPage(page_num)
+            text += page.extractText()
 
+        # Summarize text using ChatGPT API
+        response = openai.Completion.create(
+            engine=model_engine,
+            prompt=f"Summarize the following resume into 5 sentences:\n{text}",
+            max_tokens=1024,
+            n=1,
+            stop=None
+        )
+        summary = response.choices[0].text.strip()
 
-
-@app.route('/about')
-def about():
-    return render_template('about.html')
-
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+        # Render summarized text in HTML format
+        html = "<html><body><pre>{{ summary }}</pre></body></html>"
+        return render_template_string(html, summary=summary)
+ 
+    
+    return render_template("summary.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
