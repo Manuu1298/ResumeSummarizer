@@ -4,16 +4,13 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 openai.api_key = "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"
 
-@app.route('/')
-def index():
-    return render_template('upload.html')
 
-@app.route('/upload', methods=['POST'])
+@app.route('/', methods=['POST'])
 def upload():
     file = request.files['file']
     text = extract_text(file)
     summary = summarize_text(text)
-    return render_template('summary.html', summary=summary)
+    return render_template('home.html', summary=summary)
 
 def extract_text(file):
     """Extract text from a file."""
@@ -38,6 +35,16 @@ def summarize_text(text):
     )
     summary = response.choices[0].text.strip()
     return summary
+
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
