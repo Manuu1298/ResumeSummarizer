@@ -1,4 +1,6 @@
 import openai
+import requests
+import configparser
 from flask import Flask, request, render_template_string, render_template
 import PyPDF2
 
@@ -44,4 +46,4 @@ def upload_file():
     return render_template("summary.html")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
