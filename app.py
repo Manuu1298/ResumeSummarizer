@@ -37,8 +37,8 @@ def upload_file():
         summary = response.choices[0].text.strip()
 
         # Render summarized text in HTML format
-        html = "<html><body><pre>{{ summary }}</pre></body></html>"
-        return render_template_string(html, summary=summary)
+        
+        return render_template("result.html", summary=summary)
  
     
     return render_template("summary.html")
