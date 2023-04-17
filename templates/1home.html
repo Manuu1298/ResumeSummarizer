@@ -4,7 +4,8 @@
 
 <html>
 <head>
-	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 	<title>Recruitment Gadgets</title>
 	<style>
 		body {
@@ -44,8 +45,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			margin-right: 70px;
-			height: 10vh;
+			height: 5vh;
 			font-style: bold;
 		}
 
@@ -55,6 +55,7 @@
 			background-color: #ddd;
 			color: #333;
 		}
+
 		.active {
 			background-color: #74c8e9;
 			color: white;
@@ -90,8 +91,8 @@
 		input:hover[type="file"] {
 			font-family: 'Nunito', sans-serif;
 			font-weight: 700;
-			background-color: #b4eb8f;
-			color: white;
+			background-color: #d1f3bb;
+			color: rgba(80, 80, 80, 0.651);
 			padding: 7.5px 5px;
 			border: solid;
 			border-radius: 5px;
@@ -120,18 +121,35 @@
 			cursor: pointer;	
 		}		
 
+		input:hover[type="submit"] {
+			font-family: 'Nunito', sans-serif;
+			font-weight: 700;
+			background-color: #d1f3bb;
+			color: rgba(80, 80, 80, 0.651);
+			padding: 10px 20px;
+			border: solid;
+			border-radius: 5px;
+			border-color: gray;
+			border-width:2px ;
+			font-size: 18px;
+			cursor: pointer;	
+		}		
 
 		.image {
- 			width: 50px;
+ 			width: 3%;
 			align-items: center;
-			padding-left: 735px;
-			padding-top: 50px; 
-			position: absolute;
+			position: relative;
+			padding-top: 0px;
+			padding-left: 0.5%;
+
 		}
 
 	</style>
 </head>
 <body>
+	
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
@@ -139,24 +157,40 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,700&display=swap" rel="stylesheet">
 
+	<nav>
+		<div class="navbar">
+			<a class="active" href="/">Summarizer</a>
+			<a href="/JDGenerator">JD Generator</a>
+			<a href="/contact">Building...</a>
+		</div>
+		<div class="banner">Resume Summarizer</div>
+	</nav>
 
-	<div class="navbar">
-		<a class="active" href="/">Summarizer</a>
-		<a href="/Generator">JD Generator</a>
-		<a href="/contact">Building...</a>
-	</div>
-	<div class="banner">Resume Summarizer</div>
 	<html>
 		<body>
 			
+			<header class="p-4 my-2 bg-light rounded-3">
+				<div class="container-fluid">
+					<h1 class="display-5 fw-bold">TEST</h1>
+					<p class="col-md-8 lead">testysgdjhgahjsgdjhagkdjhsgfhjgaksjhdfgkajhsdgfkhjagsdkjhfgakjhsgdfkjhgasdkjhgfaskjhdgfj
+						sakjdfhakjsdfhkjadshflkjhasdflkja
+						sakjdfhasdkjfhlakjsfa-flip-horizontal
+						asdasdagjsdjhasgdjhasdfa-flip-horizontal
+						asdahjdfskjashdghfk
+						asdjhfgaskjhgdfkjhasdf</p>
+					<button class="byn btn-dark btn-lg" type="button">UPLOAD</button>
+				</div>
+			</header>
+			<div class="container-fluid">
+				<h1 class="centertextbox">Upload a Resume 
 				<img class="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/833px-PDF_file_icon.svg.png" alt="PDFLogo"> 
-			
+				</h1>
 
-			<h1 class="centertextbox">Upload a Resume</h1>
-			<form method="post" enctype="multipart/form-data">
-				<input type="file" name="pdf_file">
-				<input type="submit" value="Summarize">
-			</form>
+				<form method="post" enctype="multipart/form-data">
+					<input type="file" name="pdf_file">
+					<input type="submit" value="Summarize">
+				</form>
+			</div>
 		</body>
 	</html>
 </body>

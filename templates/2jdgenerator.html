@@ -46,12 +46,20 @@
 		<a href="/about">About</a>
 		<a href="/contact">Contact</a>
 	</div>
-	<div class="banner">Resume Summarizer</div>
-	<h1>Upload Your Resume</h1>
-	<form action="/upload" method="post" enctype="multipart/form-data">
-		<input type="file" name="resume" id="resume">
-		<br><br>
-		<input type="submit" value="Upload">
-	</form>
+	<div class="banner">JD GENERATOR</div>
+    <h1>Job Description Generator</h1>
+    <form action="/JDGenerator" method="post">
+        <label for="input1">Job Title:</label>
+        <input type="text" id="input1" name="input1" required><br>
+        <label for="input2">Must Haves:</label>
+        <input type="text" id="input2" name="input2" required><br>
+        <label for="input3">Good to Haves:</label>
+        <input type="text" id="input3" name="input3" required><br>
+        <label for="input4">Years of Experience:</label>
+        <input type="text" id="input4" name="input4" required><br>
+        <label for="input5">Extras:</label>
+        <input type="text" id="input5" name="input5" required><br>
+        <input type="submit" value="Generate Job Description">
+    </form>
 </body>
 </html>

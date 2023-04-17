@@ -3,6 +3,7 @@
 <head>
 	<title>Resume Summarizer</title>
 	<style>
+		
 		body {
 			font-family: Arial, sans-serif;
 			margin: 0;
@@ -16,15 +17,22 @@
 			background-color: #f2f2f2;
 		}
 		.banner {
+			font-family: 'Nunito', sans-serif ;
+			text-align: center;
+			padding: 15px;
+			background-color: #f2f2f2;
 			color: #333;
 			font-size: 24px;
 			font-weight: bold;
 		}
 		.navbar {
+			font-family: 'Nunito', sans-serif;
 			overflow: hidden;
 			background-color: #333;
 		}
 		.navbar a {
+			font-family: 'Nunito', sans-serif;
+			font-weight: 800;
 			float: left;
 			display: block;
 			color: #f2f2f2;
@@ -34,14 +42,19 @@
 			font-size: 18px;
 			font-weight: bold;
 		}
+
 		.navbar a:hover {
+			font-weight: 800;
+			font-family: 'Nunito', sans-serif;
 			background-color: #ddd;
 			color: #333;
 		}
+
 		.active {
-			background-color: #4CAF50;
+			background-color: #74c8e9;
 			color: white;
 		}
+
 		.container {
 			display: flex;
 			justify-content: center;
@@ -50,28 +63,37 @@
 		}
 
 		.centertextbox {
+			font-family: 'Nunito', sans-serif;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 1vh;
+			height: 10vh;
 			font-style: bold;
 		}
+		
 		.textarea-container {
 			width: 100%;
 			font-family:"Arial", Times, serif;
 			font-size: 18px;
 		}
+
 	</style>
 </head>
 <body>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,700&display=swap" rel="stylesheet">
+
+
 	<div class="navbar">
-		<a class="active" href="/">Home</a>
-		<a href="/about">About</a>
-		<a href="/contact">Contact</a>
+		<a class="active" href="/">Summarizer</a>
+		<a href="/Generator">JD Generator</a>
+		<a href="/contact">Building...</a>
 	</div>
-	<div class="banner-container">
-		<div class="banner">Resume Summarizer</div>
-	</div>
+	<div class="banner">Resume Summarizer</div>
 	<div class="container">
 		<div>
 			<h2 class="centertextbox">Summarized Resume</h2>
