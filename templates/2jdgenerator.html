@@ -3,24 +3,36 @@
 <head>
 	<title>Resume Summarizer</title>
 	<style>
+		
 		body {
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
 		}
+		.banner-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100px;
+			background-color: #f2f2f2;
+		}
 		.banner {
+			font-family: 'Nunito', sans-serif ;
 			text-align: center;
-			padding: 20px;
+			padding: 15px;
 			background-color: #f2f2f2;
 			color: #333;
 			font-size: 24px;
 			font-weight: bold;
 		}
 		.navbar {
+			font-family: 'Nunito', sans-serif;
 			overflow: hidden;
 			background-color: #333;
 		}
 		.navbar a {
+			font-family: 'Nunito', sans-serif;
+			font-weight: 800;
 			float: left;
 			display: block;
 			color: #f2f2f2;
@@ -30,34 +42,70 @@
 			font-size: 18px;
 			font-weight: bold;
 		}
+
 		.navbar a:hover {
+			font-weight: 800;
+			font-family: 'Nunito', sans-serif;
 			background-color: #ddd;
 			color: #333;
 		}
+
 		.active {
-			background-color: #4CAF50;
+			background-color: #74c8e9;
 			color: white;
 		}
+
+		.container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 30vh;
+		}
+
+		.centertextbox {
+			font-family: 'Nunito', sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 10vh;
+			font-style: bold;
+		}
+		
+		.textarea-container {
+			width: 100%;
+			font-family:"Arial", Times, serif;
+			font-size: 18px;
+		}
+
 	</style>
 </head>
 <body>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@1,700&display=swap" rel="stylesheet">
+
+	
 	<div class="navbar">
-		<a class="active" href="/">Home</a>
-		<a href="/about">About</a>
-		<a href="/contact">Contact</a>
+		<a href="/">Summarizer</a>
+		<a class="active" href="/JDGenerator">JD Generator</a>
+		<a href="/contact">Building...</a>
 	</div>
+	
 	<div class="banner">JD GENERATOR</div>
     <h1>Job Description Generator</h1>
     <form action="/JDGenerator" method="post">
-        <label for="input1">Job Title:</label>
+        <label for="input1">Remote or Relocation:</label>
         <input type="text" id="input1" name="input1" required><br>
-        <label for="input2">Must Haves:</label>
+        <label for="input2">Job Title:</label>
         <input type="text" id="input2" name="input2" required><br>
-        <label for="input3">Good to Haves:</label>
+        <label for="input3">Must Have:</label>
         <input type="text" id="input3" name="input3" required><br>
-        <label for="input4">Years of Experience:</label>
+        <label for="input4">Good to Have:</label>
         <input type="text" id="input4" name="input4" required><br>
-        <label for="input5">Extras:</label>
+        <label for="input5">Years of Experience:</label>
         <input type="text" id="input5" name="input5" required><br>
         <input type="submit" value="Generate Job Description">
     </form>

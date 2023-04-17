@@ -68,8 +68,8 @@ def generate_job_description():
 
     response1 = openai.Completion.create(
         engine=model_engine,
-        prompt=f"Generate a FULL job description with at least with the following requirements, job title: \n{input1} must haves: \n {input2} good to haves: \n {input3} years of experience: \n{input4} extras: \n{input5}",
-        max_tokens=3900,
+        prompt=f"Generate a FULL job description with the following requirements and structure, Remote or Relocation: \n{input1} Job Title: \n {input2} Must Have: \n {input3} Good to Have: \n{input4} Years of Experience: \n{input5}, please use this structure: Remote or Relocation opportunity: Explain if this a a remote or relocation opportunity -Job Title: Clearly state the title of the position, which should accurately reflect the role and responsibilities of the job. -Overview: Provide a brief summary of the job, including its purpose and how it fits within the organization. -Responsibilities: List the main tasks, duties, and responsibilities of the role. Use bullet points to make it easy to read and understand. Include both the day-to-day tasks and any larger projects or initiatives the employee will be responsible for. -Qualifications: Outline must haves and good to haves qualifications for the job. This may include experience, skills, certifications, and any other relevant qualifications necessary to perform the job successfully. -Company Culture and Values: Briefly describe the company's culture and values, and how they align with the expectations for the role. -Equal Opportunity Employer Statement: Include a statement indicating that the company is an equal opportunity employer and does not discriminate based on race, color, religion, sex, sexual orientation, gender identity, national origin, age, disability, or any other protected status. ",
+        max_tokens=3700,
         temperature=1.3,
         n=1,
         stop=None
