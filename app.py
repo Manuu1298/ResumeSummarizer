@@ -2,12 +2,10 @@ import openai
 import requests
 import configparser
 from flask import Flask, request, render_template_string, render_template
-from flask_bootstrap import Bootstrap
 import PyPDF2
 
 
 app = Flask(__name__)
-Bootstrap(app)
 openai.api_key = "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"
 model_engine = 'text-davinci-002'
 
