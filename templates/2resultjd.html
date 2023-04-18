@@ -63,18 +63,20 @@
 		}
 
 		.centertextbox {
+			padding-top: 225px;
 			font-family: 'Nunito', sans-serif;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 10vh;
+			height: 5vh;
 			font-style: bold;
 		}
 		
 		.textarea-container {
 			width: 100%;
-			font-family:"Arial", Times, serif;
-			font-size: 18px;
+			font-family:'Nunito', sans-serif;
+			font-weight: 700;
+			font-size: 17px;
 		}
 
 	</style>
@@ -93,11 +95,13 @@
 		<a class="active" href="/JDGenerator">JD Generator</a>
 		<a href="/contact">Building...</a>
 	</div>
-	<div class="banner">JD GENERATOR</div>
+	<div class="banner">Job Description Generator</div>
 	<div class="container">
 		<body>
-			<h1>Generated Job Description</h1>
-			<textarea rows="10" cols="50">{{ job_description }}</textarea>
+			<div>
+				<h2 class="centertextbox">Generated Job Description</h2>
+				<textarea class="textarea-container" rows="23" cols="100"  readonly>{{ job_description }}</textarea>
+			</div>
 		</body>
 </body>
 </html>

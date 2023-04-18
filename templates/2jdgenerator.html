@@ -67,7 +67,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 10vh;
+			height: 5vh;
 			font-style: bold;
 		}
 		
@@ -76,6 +76,69 @@
 			font-family:"Arial", Times, serif;
 			font-size: 18px;
 		}
+
+		.spacing{
+			margin-bottom: 10px;
+			padding-top: 2px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.custom-button {
+		font-family: 'Nunito', sans-serif;
+		font-weight: 700;
+		background-color: #74c8e9;
+		color: #fff;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 3px;
+		font-size: 16px;
+		cursor: pointer;
+		border: solid;
+		border-radius: 3px;
+		border-color: gray;
+		}
+
+		.custom-button:hover {
+		font-family: 'Nunito', sans-serif;
+		font-weight: 700;
+		background-color: gray;
+		color: rgb(255, 255, 255);
+		padding: 10px 20px;
+		border: none;
+		border-radius: 3px;
+		font-size: 16px;
+		cursor: pointer;
+		border: solid;
+		border-radius: 3px;
+		border-color: rgb(0, 0, 0);
+		}
+
+		.image {
+ 		width: 3%;
+		align-items: center;
+		position: relative;
+		padding-top: 0px;
+		padding-left: 0.5%;
+		justify-content: center;
+		}
+
+		.paragraph{
+		font-family: 'Nunito', sans-serif;
+		font-size:larger;
+		font-weight: 800;
+		background-color: #f2f2f2;
+		padding-left:50%;
+		padding: 50px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 0vh;
+		}		
 
 	</style>
 </head>
@@ -94,20 +157,24 @@
 		<a href="/contact">Building...</a>
 	</div>
 	
-	<div class="banner">JD GENERATOR</div>
-    <h1>Job Description Generator</h1>
-    <form action="/JDGenerator" method="post">
-        <label for="input1">Remote or Relocation:</label>
-        <input type="text" id="input1" name="input1" required><br>
-        <label for="input2">Job Title:</label>
-        <input type="text" id="input2" name="input2" required><br>
-        <label for="input3">Must Have:</label>
-        <input type="text" id="input3" name="input3" required><br>
-        <label for="input4">Good to Have:</label>
-        <input type="text" id="input4" name="input4" required><br>
-        <label for="input5">Years of Experience:</label>
-        <input type="text" id="input5" name="input5" required><br>
-        <input type="submit" value="Generate Job Description">
-    </form>
+	<div class="container-fluid">
+		<h1 class="centertextbox">Job Description Generator 
+		<img class="image" src="https://e7.pngegg.com/pngimages/4/921/png-clipart-application-for-employment-job-computer-icons-resume-others-template-text-thumbnail.png" alt="JDLogo"> 
+		</h1>
+			<p class="paragraph">This tool is used to generate a Job Description with limited information available. Make sure you fill all the inputs below and it will generate a Job Listing for your opening. If you are not satisfied with the Job Listing provided, you can refresh the page to get a new result or come back to this page and resubmit the details of the job.</p>
+	</div>
+	<form class="spacing" action="/JDGenerator" method="post" style="text-align: center;">
+		<label for="input1">Remote or Relocation:</label>
+		<input class="spacing"type="text" id="input1" name="input1" required><br>
+		<label for="input2">Job Title:</label>
+		<input class="spacing"type="text" id="input2" name="input2" required><br>
+		<label for="input3">Must Have:</label>
+		<input class="spacing"type="text" id="input3" name="input3" required><br>
+		<label for="input4">Good to Have:</label>
+		<input class="spacing"type="text" id="input4" name="input4" required><br>
+		<label for="input5">Years of Experience:</label>
+		<input class="spacing"type="text" id="input5" name="input5" required><br>
+		<input class="custom-button" type="submit" value="Generate Job Description">
+	</form>
 </body>
 </html>
