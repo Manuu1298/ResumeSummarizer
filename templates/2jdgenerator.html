@@ -3,18 +3,11 @@
 <head>
 	<title>Resume Summarizer</title>
 	<style>
-		
 		body {
-			font-family: Arial, sans-serif;
+			font-family: 'Nunito', sans-serif;
+			background-color: #74c8e9;
 			margin: 0;
 			padding: 0;
-		}
-		.banner-container {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100px;
-			background-color: #f2f2f2;
 		}
 		.banner {
 			font-family: 'Nunito', sans-serif ;
@@ -25,12 +18,12 @@
 			font-size: 24px;
 			font-weight: bold;
 		}
-		.navbar {
+		.navbar1 {
 			font-family: 'Nunito', sans-serif;
 			overflow: hidden;
 			background-color: #333;
 		}
-		.navbar a {
+		.navbar1 a {
 			font-family: 'Nunito', sans-serif;
 			font-weight: 800;
 			float: left;
@@ -43,7 +36,16 @@
 			font-weight: bold;
 		}
 
-		.navbar a:hover {
+		.centertextbox {
+			font-family: 'Nunito', sans-serif;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 5vh;
+			font-style: bold;
+		}
+
+		.navbar1 a:hover {
 			font-weight: 800;
 			font-family: 'Nunito', sans-serif;
 			background-color: #ddd;
@@ -55,90 +57,107 @@
 			color: white;
 		}
 
-		.container {
+		form {
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 30vh;
-		}
-
-		.centertextbox {
-			font-family: 'Nunito', sans-serif;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 5vh;
-			font-style: bold;
+			height: 20h;
+			flex-direction: column;
 		}
 		
-		.textarea-container {
-			width: 100%;
-			font-family:"Arial", Times, serif;
-			font-size: 18px;
+		input[type="file1"] {
+			font-family: 'Nunito', sans-serif;
+			margin-bottom: 20px;
+			font-weight: 700;
+			border-width: 2px ;
+			background-color: #74c8e9;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			font-size: 16px;
+			cursor: pointer;
+			border: solid;
+			border-radius: 3px;
+			border-color: gray;
+		}		
+
+		input:hover[type="file1"] {
+			font-family: 'Nunito', sans-serif;
+			margin-bottom: 20px;
+			font-weight: 700;
+			border-width:2px ;
+			background-color: gray;
+			color: rgb(255, 255, 255);
+			padding: 10px 20px;
+			border: none;
+			font-size: 16px;
+			cursor: pointer;
+			border: solid;
+			border-radius: 3px;
+			border-color: rgb(0, 0, 0);
 		}
 
-		.spacing{
-			margin-bottom: 10px;
-			padding-top: 2px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
+		input[type="submit1"] {
+			font-family: 'Nunito', sans-serif;
+			font-weight: 700;
+			border-width:2px ;
+			background-color: #74c8e9;
+			color: #fff;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 3px;
+			font-size: 16px;
+			cursor: pointer;
+			border: solid;
+			border-radius: 3px;
+			border-color: gray;	
+		}		
 
-		.custom-button {
-		font-family: 'Nunito', sans-serif;
-		font-weight: 700;
-		background-color: #74c8e9;
-		color: #fff;
-		padding: 10px 20px;
-		border: none;
-		border-radius: 3px;
-		font-size: 16px;
-		cursor: pointer;
-		border: solid;
-		border-radius: 3px;
-		border-color: gray;
-		}
-
-		.custom-button:hover {
-		font-family: 'Nunito', sans-serif;
-		font-weight: 700;
-		background-color: gray;
-		color: rgb(255, 255, 255);
-		padding: 10px 20px;
-		border: none;
-		border-radius: 3px;
-		font-size: 16px;
-		cursor: pointer;
-		border: solid;
-		border-radius: 3px;
-		border-color: rgb(0, 0, 0);
-		}
+		input:hover[type="submit1"] {
+			font-family: 'Nunito', sans-serif;
+			font-weight: 700;
+			border-width:2px ;
+			background-color: gray;
+			color: rgb(255, 255, 255);
+			padding: 10px 20px;
+			border: none;
+			font-size: 16px;
+			cursor: pointer;
+			border: solid;
+			border-radius: 3px;
+			border-color: rgb(0, 0, 0);	
+		}		
 
 		.image {
- 		width: 3%;
-		align-items: center;
-		position: relative;
-		padding-top: 0px;
-		padding-left: 0.5%;
-		justify-content: center;
+ 			width: 3%;
+			align-items: center;
+			position: relative;
+			padding-top: 0px;
+			padding-left: 0.5%;
+			justify-content: center;
+
 		}
 
 		.paragraph{
-		font-family: 'Nunito', sans-serif;
-		font-size:larger;
-		font-weight: 800;
-		background-color: #f2f2f2;
-		padding-left:50%;
-		padding: 50px;
-		border: 1px solid #ddd;
-		border-radius: 5px;
-		text-align: center;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 0vh;
-		}		
+			font-family: 'Nunito', sans-serif;
+			font-size:larger;
+			font-weight: 800;
+			background-color: #f2f2f2;
+			padding-left:50%;
+			padding: 50px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			text-align: center;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 0vh;
+		}
+
+		p.text-justify {
+        margin-bottom: 20px;
+    	}	
+
 
 	</style>
 </head>

@@ -51,7 +51,7 @@ def upload_file():
 
 @app.route('/JDGenerator')
 def index():
-    return render_template('2jdgenerator.html')
+    return render_template('testgenerator.html')
 
 @app.route('/JDGenerator', methods=['POST'])
 def generate_job_description():
@@ -76,7 +76,7 @@ def generate_job_description():
     # Extract generated job description from API response
     job_description = response1.choices[0].text.strip()
 
-    return render_template('2resultjd.html', job_description=job_description)
+    return render_template('testgeneratorresult.html', job_description=job_description)
 
 
 if __name__ == '__main__':

@@ -158,16 +158,25 @@
 		}
 
 		p.text-justify {
-        margin-bottom: 20px;
+			margin-bottom: 20px;
     	}	
+
+
+
+		.overflow-hidden {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 
 
 	</style>
 	<!-- Bootstrap CSS -->
-
-	<!-- Navbar -->
- 
+	
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<!-- Navbar -->	
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
 		<a class="navbar-brand" style="font-weight: 700;">Recruitment Gadgets</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,52 +202,29 @@
 		  </form>
 		</div>
 	  </nav>  
- <!-- Navbar -->	
+<!-- Navbar -->
+
 </head>
+
 <body style="background-color: #33333321">
-	
-	<div class="container my-5">
-		<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-		<div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-			<h1 class="display-4 fw-bold lh-1">Resume Summarizer</h1>
-			<p class="text-justify">When it comes to hiring for tech positions, reviewing resumes can be time-consuming and overwhelming. That's where an app that can summarize PDF resumes can be a valuable tool.</p>
-	
-			<p class="text-justify"> With this app, you can quickly and easily upload PDF resumes from potential candidates and have them automatically summarized into a concise, yet informative overview of their qualifications. Using advanced natural language processing algorithms, the app can extract key information such as education, work experience, technical skills, and achievements, presenting it in a format that's easy to read and understand. This can save you time and help you identify the most promising candidates for your tech roles. By streamlining your hiring process with a resume summarization app, you can make your recruitment efforts more efficient and effective.</p>
-	
-			<form method="post" enctype="multipart/form-data">
-				<div class="custom-file mb-3">
-					<input type="file" class="custom-file-input" name="pdf_file" id="pdf_file_input">
-					<label class="custom-file-label" for="pdf_file_input" cursor="pointer">Upload your Resume here</label>
-				</div>
-				<input type="submit" class="btn btn-primary btn-lg btn-gray" value="Summarize">
-			  </form>
-			  <script>
-				const fileInput = document.getElementById('pdf_file_input');
-				const fileLabel = fileInput.nextElementSibling;
-				fileInput.addEventListener('change', () => {
-					const fileName = fileInput.files[0].name;
-					fileLabel.innerHTML = fileName;
-				});
-			</script>
-		</div>
-	
-		<div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-			<img class="rounded-lg-3" src="https://craft-cv.com/blog/post_img/1697671189599767/resume-template-pdf.jpg" alt="notepad" width="500">
-		</div>
-		</div>
-
-		  <div class="px-4 py-5 my-5 text-center overflow-hidden shadow-lg">
-			<h1 class="display-4 fw-bold lh-1">Summarized Resume</h1>
-			<div class="form-floating">
-			  <textarea class="form-control" id="summary" placeholder="Your summary will be shown here" style="height: 200px">{{ summary }}</textarea>
-			  <input type="submit" class="btn btn-primary btn-lg  mt-5" onclick="location.reload()" value="Generate Again">
-			</div>
-			</div>
-		  </div>
-		</div>
-	</div>
-
+  <div class="container px-4 py-5 my-5 text-center ">
+    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+      <div class=" p-3 p-lg-5 pt-lg-3 col-lg-10 mx-auto">
+        <h1 class="display-4 fw-bold lh-1">Job Description Generator</h1>
+        <p class="text-justify">The job description app is designed to create a job description based on the information you provide. The app uses advanced algorithms to generate a job description that is tailored to your specific needs. The app is especially useful when the information provided is limited, as it can still generate a detailed job description. However, the more detailed the inputs you provide, the better the job description will be. To use the app, simply input the job title and a brief description of the job. You can also provide additional details such as the required qualifications, experience, and skills. The more information you provide, the more accurate the job description will be. Once you have provided all the necessary inputs, the app will generate a detailed job description that you can use for your recruitment process. If you need any further assistance, please do not hesitate to contact our support team.</p>
+      </div>
 	  
+      <div class="overflow-hidden mx-auto" style="max-height: 500vh;" >
+		<div class="form-floating">
+			<textarea class="form-control" id="JDGenerator" style="width: 800px; height: 800px;">{{ job_description }}</textarea>
+			<input type="submit" class="btn btn-primary btn-lg  mt-5" onclick="location.reload()" value="Generate Again">
+		</div>
+      </div>
+    </div>
+  </div>
+</body>
+
+
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
