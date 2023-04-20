@@ -41,10 +41,10 @@ def upload_file():
 
         # Render summarized text in HTML format
         
-        return render_template("1result.html", summary=summary)
+        return render_template("testresult.html", summary=summary)
  
     
-    return render_template("1home.html")
+    return render_template("test.html")
 
 
 
