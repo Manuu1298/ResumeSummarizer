@@ -37,11 +37,22 @@ def upload_file():
             n=1,
             stop=None
         )
+
+        response2 = openai.Completion.create(
+            engine=model_engine,
+            prompt=f"Based on the following Resume, can you list the main companies this candidate worked and share if the companies are  Consulting companies or if they develop their own Technology Product? This is the resume: \n{text} Use the following structure: \n Main Companies - Product or Consulting ",
+            max_tokens= 1500,
+            temperature=1.3,
+            n=1,
+            stop=None
+        )
+    
+        companytype = response2.choices[0].text.strip()
         summary = response.choices[0].text.strip()
 
         # Render summarized text in HTML format
         
-        return render_template("1summarizerresult.html", summary=summary)
+        return render_template("1summarizerresult.html", summary=summary, companytype=companytype)
  
     
     return render_template("1summarizer.html")
@@ -73,8 +84,12 @@ def generate_job_description():
         stop=None
         )
 
+
+
     # Extract generated job description from API response
     job_description = response1.choices[0].text.strip()
+
+
 
     return render_template('testgeneratorresult.html', job_description=job_description)
 

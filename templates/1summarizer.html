@@ -170,9 +170,10 @@
 
 	</style>
 	<!-- Bootstrap CSS -->
-	
+
+	<!-- Navbar -->	
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top" >
 		<a class="navbar-brand" style="font-weight: 700;">Recruitment Gadgets</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
@@ -197,7 +198,8 @@
 		  </form>
 		</div>
 	  </nav>  
-
+	<!-- Navbar -->
+	
 </head>
   <body style="background-color: #33333321">
 	
@@ -234,16 +236,15 @@
 			  <div class="px-4 py-5 my-5 text-center overflow-hidden shadow-lg">
 				<h1 class="display-4 fw-bold lh-1">Summarized Resume</h1>
 				<div class="form-floating">
-				  <textarea class="form-control" id="summary" placeholder="Your summary will be shown here" style="height: 200px">{{ summary }}</textarea>
-				  <input type="submit" class="btn btn-primary btn-lg btn-gray mt-5" onclick="location.reload()" value="Generate Again">
+					<textarea class="form-control mt-3" id="summary" placeholder="Your summary will be shown here" style="height: 150px">{{ companytype }}</textarea>	
+					<textarea class="form-control mt-5" id="summary" placeholder="Your summary will be shown here" style="height: 200px">{{ summary }}</textarea>
+					<input type="submit" class="btn btn-primary btn-lg btn-gray mt-5" onclick="location.reload()" value="Generate Again">
 
 				</div>
 			  </div>
 			</div>
 		</div>
-	<!-- Navbar -->
 
-  <!-- Navbar -->
 
 	</nav>	  
 	<!-- Optional JavaScript -->
