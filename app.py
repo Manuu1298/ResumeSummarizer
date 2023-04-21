@@ -38,16 +38,25 @@ def upload_file():
             stop=None
         )
 
-        response2 = openai.Completion.create(
+        companies = openai.Completion.create(
             engine=model_engine,
-            prompt=f"Based on the following Resume, can you list the main companies this candidate worked and share if the companies are Consulting companies if they aren't just put Product next to it. This is the resume: \n{text} Use the following structure: \n Main Companies - Product or Consulting ",
-            max_tokens= 1500,
+            prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
+            max_tokens= 900,
             temperature=0.5,
             n=1,
             stop=None
         )
+
+        response3 = openai.Completion.create(
+            engine=model_engine,
+            prompt=f"Can you list the following companies and tell me what they do and if they are a consulting company. Use the following structure: \n - : - What they do \n These are the companies: \n{companies}",
+            max_tokens= 1500,
+            temperature=0.3,
+            n=1,
+            stop=None
+        )
     
-        companytype = response2.choices[0].text.strip()
+        companytype = response3.choices[0].text.strip()
         summary = response.choices[0].text.strip()
 
         # Render summarized text in HTML format
