@@ -7,7 +7,7 @@ import PyPDF2
 
 app = Flask(__name__)
 openai.api_key = "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"
-model_engine = 'text-davinci-002'
+model_engine = 'text-davinci-003'
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -33,7 +33,7 @@ def upload_file():
         response = openai.Completion.create(
             engine=model_engine,
             prompt= f"Summarize this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used)n:\n{text}",
-            max_tokens=2000,
+            max_tokens=900,
             n=1,
             stop=None
         )
@@ -41,7 +41,7 @@ def upload_file():
         companies = openai.Completion.create(
             engine=model_engine,
             prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
-            max_tokens= 900,
+            max_tokens= 500,
             temperature=0.3,
             n=1,
             stop=None
@@ -50,7 +50,7 @@ def upload_file():
         response3 = openai.Completion.create(
             engine=model_engine,
             prompt=f"Can you list the following companies and tell me about what they do. Use the following structure: \n - : - \n This is the list of companies {companies}",
-            max_tokens= 900,
+            max_tokens= 800,
             temperature=0.2,
             n=1,
             stop=None
