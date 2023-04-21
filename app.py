@@ -49,7 +49,7 @@ def upload_file():
 
         response3 = openai.Completion.create(
             engine=model_engine,
-            prompt=f"Can you list the following companies and tell me what they do and if they are a consulting company. Use the following structure: \n - : - What they do \n These are the companies: -Consulting or Product Based\n{companies}",
+            prompt=f"Can you list the following companies and tell me what they do and if they are a consulting company. Use the following structure: \n - : - What they do \n{companies}",
             max_tokens= 1500,
             temperature=0.3,
             n=1,
