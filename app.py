@@ -42,7 +42,7 @@ def upload_file():
             engine=model_engine,
             prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
             max_tokens= 900,
-            temperature=0.5,
+            temperature=0.3,
             n=1,
             stop=None
         )
@@ -50,8 +50,8 @@ def upload_file():
         response3 = openai.Completion.create(
             engine=model_engine,
             prompt=f"Can you list the following companies and tell me about what they do. Use the following structure: \n - : - \n This is the list of companies {companies}",
-            max_tokens= 1500,
-            temperature=0.3,
+            max_tokens= 900,
+            temperature=0.2,
             n=1,
             stop=None
         )
