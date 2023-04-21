@@ -32,8 +32,8 @@ def upload_file():
         # Summarize text using ChatGPT API
         response = openai.Completion.create(
             engine=model_engine,
-            prompt= f"Summarize this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used)n:\n{text}",
-            max_tokens=900,
+            prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
+            max_tokens=500,
             n=1,
             stop=None
         )
@@ -41,7 +41,7 @@ def upload_file():
         companies = openai.Completion.create(
             engine=model_engine,
             prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
-            max_tokens= 500,
+            max_tokens= 300,
             temperature=0.3,
             n=1,
             stop=None
