@@ -32,17 +32,17 @@ def upload_file():
         # Summarize text using ChatGPT API
         response = openai.Completion.create(
             engine=model_engine,
-            prompt= f"Summarize this resume focusing on the type of companies and projects the person worked:\n{text}",
-            max_tokens=1024,
+            prompt= f"Summarize this resume focusing on the type of companies and projects the person worked (make sure you share the main technologies used)n:\n{text}",
+            max_tokens=2000,
             n=1,
             stop=None
         )
 
         response2 = openai.Completion.create(
             engine=model_engine,
-            prompt=f"Based on the following Resume, can you list the main companies this candidate worked and share if the companies are  Consulting companies or if they develop their own Technology Product? This is the resume: \n{text} Use the following structure: \n Main Companies - Product or Consulting ",
+            prompt=f"Based on the following Resume, can you list the main companies this candidate worked and share if the companies are Consulting companies if they aren't just put Product next to it. This is the resume: \n{text} Use the following structure: \n Main Companies - Product or Consulting ",
             max_tokens= 1500,
-            temperature=1.3,
+            temperature=0.5,
             n=1,
             stop=None
         )
