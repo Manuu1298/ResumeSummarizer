@@ -49,7 +49,7 @@ def upload_file():
 
         response3 = openai.Completion.create(
             engine=model_engine,
-            prompt=f"Can you list the following companies and tell me what their industry is based on LinkedIn. Use the following structure: \n - : - Industry \n This is the list of companies {companies}",
+            prompt=f"Can you list the following companies and tell me about what they do. Use the following structure: \n - : - \n This is the list of companies {companies}",
             max_tokens= 1500,
             temperature=0.3,
             n=1,
