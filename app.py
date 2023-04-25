@@ -10,11 +10,40 @@ app = Flask(__name__)
 openai.api_key = "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"
 model_engine = 'text-davinci-003'
 
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
+async def summarize_text(text):
+    response = openai.Completion.create(
+        engine=model_engine,
+        prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
+        max_tokens=500,
+        n=1,
+        stop=None
+    )
+    return response.choices[0].text.strip()
+
+async def extract_companies(text):
+    companies = openai.Completion.create(
+        engine=model_engine,
+        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
+        max_tokens= 300,
+        temperature=0.3,
+        n=1,
+        stop=None
+    )
+    return companies.choices[0].text.strip()
+
+async def extract_company_type(companies):
+    response = openai.Completion.create(
+        engine=model_engine,
+        prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
+        max_tokens= 800,
+        temperature=0.2,
+        n=1,
+        stop=None
+    )
+    return response.choices[0].text.strip()
 
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+async def upload_file():
     if request.method == 'POST':
         # Check if file is uploaded
         if 'pdf_file' not in request.files:
@@ -33,43 +62,20 @@ def upload_file():
             page = pdf_reader.getPage(page_num)
             text += page.extractText()
 
-        # Summarize text using ChatGPT API
-        response = openai.Completion.create(
-            engine=model_engine,
-            prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
-            max_tokens=500,
-            n=1,
-            stop=None
-        )
+        # Make API requests using asyncio
+        summary_task = asyncio.create_task(summarize_text(text))
+        companies_task = asyncio.create_task(extract_companies(text))
 
-        companies = openai.Completion.create(
-            engine=model_engine,
-            prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
-            max_tokens= 300,
-            temperature=0.3,
-            n=1,
-            stop=None
-        )
+        # Wait for API responses
+        summary = await summary_task
+        companies = await companies_task
 
-        response3 = openai.Completion.create(
-            engine=model_engine,
-            prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
-            max_tokens= 800,
-            temperature=0.2,
-            n=1,
-            stop=None
-        )
-    
-        companytype = response3.choices[0].text.strip()
-        summary = response.choices[0].text.strip()
+        companytype = await extract_company_type(companies)
 
         # Render summarized text in HTML format
-        
         return render_template("1summarizerresult.html", summary=summary, companytype=companytype)
- 
-    
-    return render_template("1summarizer.html")
 
+    return render_template("1summarizer.html")
 
 
 
