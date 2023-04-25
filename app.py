@@ -1,13 +1,55 @@
+import os
 import openai
 import requests
 import configparser
 from flask import Flask, request, render_template_string, render_template
 import PyPDF2
-
+from celery import Celery
 
 app = Flask(__name__)
+app.config['CELERY_BROKER_URL'] = os.environ.get('amqps://wlefhdrf:Uetg-pd3atU9UEqD0Rt2n3w0pIdXK4zP@chimpanzee.rmq.cloudamqp.com/wlefhdrf', 'amqp://guest@localhost//')
+app.config['CELERY_RESULT_BACKEND'] = os.environ.get('amqps://wlefhdrf:Uetg-pd3atU9UEqD0Rt2n3w0pIdXK4zP@chimpanzee.rmq.cloudamqp.com/wlefhdrf', 'amqp://guest@localhost//')
 openai.api_key = "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"
 model_engine = 'text-davinci-003'
+
+# Initialize Celery instance
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
+@celery.task
+def summarize_text(text):
+    response = openai.Completion.create(
+        engine=model_engine,
+        prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
+        max_tokens=500,
+        n=1,
+        stop=None
+    )
+    return response.choices[0].text.strip()
+
+@celery.task
+def extract_companies(text):
+    companies = openai.Completion.create(
+        engine=model_engine,
+        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
+        max_tokens= 300,
+        temperature=0.3,
+        n=1,
+        stop=None
+    )
+    return companies.choices[0].text.strip()
+
+@celery.task
+def summarize_companies(companies):
+    response = openai.Completion.create(
+        engine=model_engine,
+        prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
+        max_tokens= 800,
+        temperature=0.2,
+        n=1,
+        stop=None
+    )
+    return response.choices[0].text.strip()
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -29,44 +71,24 @@ def upload_file():
             page = pdf_reader.getPage(page_num)
             text += page.extractText()
 
-        # Summarize text using ChatGPT API
-        response = openai.Completion.create(
-            engine=model_engine,
-            prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
-            max_tokens=500,
-            n=1,
-            stop=None
-        )
+        # Call Celery tasks to summarize text and extract companies
+        summary_task = summarize_text.delay(text)
+        companies_task = extract_companies.delay(text)
 
-        companies = openai.Completion.create(
-            engine=model_engine,
-            prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
-            max_tokens= 300,
-            temperature=0.3,
-            n=1,
-            stop=None
-        )
+        # Wait for tasks to complete and get results
+        summary = summary_task.get()
+        companies = companies_task.get()
 
-        response3 = openai.Completion.create(
-            engine=model_engine,
-            prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
-            max_tokens= 800,
-            temperature=0.2,
-            n=1,
-            stop=None
-        )
-    
-        companytype = response3.choices[0].text.strip()
-        summary = response.choices[0].text.strip()
+        # Call Celery task to summarize companies
+        companytype_task = summarize_companies.delay(companies)
+
+        # Wait for task to complete and get result
+        companytype = companytype_task.get()
 
         # Render summarized text in HTML format
-        
-        return render_template("1summarizerresult.html", summary=summary, companytype=companytype)
- 
-    
+        return render_template("1summarizerresult", summary=summary, companytype=companytype)
+
     return render_template("1summarizer.html")
-
-
 
 
 @app.route('/JDGenerator')
