@@ -15,6 +15,7 @@ async def summarize_text(text):
         engine=model_engine,
         prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
         max_tokens=500,
+        temperature=0.3,
         n=1,
         stop=None
     )
