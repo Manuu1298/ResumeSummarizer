@@ -1,50 +1,54 @@
+import asyncio
 import openai
 import requests
 import configparser
 from flask import Flask, request, render_template_string, render_template
 import PyPDF2
-import asyncio
-
+import json
 
 app = Flask(__name__)
 openai.api_key = "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"
 model_engine = 'text-davinci-003'
 
-async def summarize_text(text):
+async def summarize(pdf_text):
     response = openai.Completion.create(
         engine=model_engine,
-        prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
-        max_tokens=500,
-        temperature=0.3,
+        prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{pdf_text}",
+        max_tokens=100,
         n=1,
         stop=None
     )
     return response.choices[0].text.strip()
 
-async def extract_companies(text):
-    companies = openai.Completion.create(
+async def extract_companies(pdf_text):
+    response = openai.Completion.create(
         engine=model_engine,
-        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
-        max_tokens= 300,
+        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{pdf_text}",
+        max_tokens= 50,
         temperature=0.3,
         n=1,
         stop=None
     )
-    return companies.choices[0].text.strip()
+    companies = response.choices[0].text.strip()
 
-async def extract_company_type(companies):
     response = openai.Completion.create(
         engine=model_engine,
         prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
-        max_tokens= 800,
+        max_tokens= 100,
         temperature=0.2,
         n=1,
         stop=None
     )
     return response.choices[0].text.strip()
 
+async def summarize_resume(pdf_text):
+    summary = await summarize(pdf_text)
+    companies = await extract_companies(pdf_text)
+    companytype = await extract_companies(companies)
+    return summary, companytype
+
 @app.route('/', methods=['GET', 'POST'])
-async def upload_file():
+def upload_file():
     if request.method == 'POST':
         # Check if file is uploaded
         if 'pdf_file' not in request.files:
@@ -58,31 +62,27 @@ async def upload_file():
 
         # Read PDF file and extract text
         pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-        text = ''
+        pdf_text = ''
         for page_num in range(pdf_reader.numPages):
             page = pdf_reader.getPage(page_num)
-            text += page.extractText()
+            pdf_text += page.extractText()
 
-        # Make API requests using asyncio
-        summary_task = asyncio.create_task(summarize_text(text))
-        companies_task = asyncio.create_task(extract_companies(text))
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        summary, companytype = loop.run_until_complete(summarize_resume(pdf_text))
+        loop.close()
 
-        # Wait for API responses
-        summary = await summary_task
-        companies = await companies_task
-
-        companytype = await extract_company_type(companies)
-
-        # Render summarized text in HTML format
-        return render_template("1summarizerresult.html", summary=summary, companytype=companytype)
+        # Return summarized text in JSON format
+        return json.dumps({'summary': summary, 'companytype': companytype})
 
     return render_template("1summarizer.html")
 
 
 
+
 @app.route('/JDGenerator')
 def index():
-    return render_template('testgenerator.html')
+    return render_template('2testgenerator.html')
 
 @app.route('/JDGenerator', methods=['POST'])
 def generate_job_description():
@@ -105,13 +105,12 @@ def generate_job_description():
         )
 
 
-
     # Extract generated job description from API response
     job_description = response1.choices[0].text.strip()
 
 
 
-    return render_template('testgeneratorresult.html', job_description=job_description)
+    return render_template('2testgeneratorresult.html', job_description=job_description)
 
 
 if __name__ == '__main__':
