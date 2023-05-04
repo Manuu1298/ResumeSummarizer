@@ -1,54 +1,50 @@
-import asyncio
 import openai
 import requests
 import configparser
 from flask import Flask, request, render_template_string, render_template
 import PyPDF2
-import json
+import asyncio
+
 
 app = Flask(__name__)
 openai.api_key = "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"
-model_engine = 'text-davinci-003'
+model_engine = 'text-davinci-002'
 
-async def summarize(pdf_text):
+async def summarize_text(text):
     response = openai.Completion.create(
         engine=model_engine,
-        prompt= f"Summarize in 1 paragraph this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{pdf_text}",
-        max_tokens=100,
+        prompt= f"Summarize in 1 paragraphs this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
+        max_tokens=150,
+        temperature=0.3,
         n=1,
         stop=None
     )
     return response.choices[0].text.strip()
 
-async def extract_companies(pdf_text):
-    response = openai.Completion.create(
+async def extract_companies(text):
+    companies = openai.Completion.create(
         engine=model_engine,
-        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{pdf_text}",
-        max_tokens= 50,
+        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
+        max_tokens= 80,
         temperature=0.3,
         n=1,
         stop=None
     )
-    companies = response.choices[0].text.strip()
+    return companies.choices[0].text.strip()
 
+async def extract_company_type(companies):
     response = openai.Completion.create(
         engine=model_engine,
         prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
-        max_tokens= 100,
+        max_tokens= 80,
         temperature=0.2,
         n=1,
         stop=None
     )
     return response.choices[0].text.strip()
 
-async def summarize_resume(pdf_text):
-    summary = await summarize(pdf_text)
-    companies = await extract_companies(pdf_text)
-    companytype = await extract_companies(companies)
-    return summary, companytype
-
 @app.route('/', methods=['GET', 'POST'])
-def upload_file():
+async def upload_file():
     if request.method == 'POST':
         # Check if file is uploaded
         if 'pdf_file' not in request.files:
@@ -62,21 +58,25 @@ def upload_file():
 
         # Read PDF file and extract text
         pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-        pdf_text = ''
+        text = ''
         for page_num in range(pdf_reader.numPages):
             page = pdf_reader.getPage(page_num)
-            pdf_text += page.extractText()
+            text += page.extractText()
 
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        summary, companytype = loop.run_until_complete(summarize_resume(pdf_text))
-        loop.close()
+        # Make API requests using asyncio
+        summary_task = asyncio.create_task(summarize_text(text))
+        companies_task = asyncio.create_task(extract_companies(text))
 
-        # Return summarized text in JSON format
-        return json.dumps({'summary': summary, 'companytype': companytype})
+        # Wait for API responses
+        summary = await summary_task
+        companies = await companies_task
+
+        companytype = await extract_company_type(companies)
+
+        # Render summarized text in HTML format
+        return render_template("1summarizer.html", summary=summary, companytype=companytype)
 
     return render_template("1summarizer.html")
-
 
 
 
@@ -94,6 +94,7 @@ def generate_job_description():
     input5 = request.form['input5']
 
     # Make API request to ChatGPT API
+    model_engine = 'text-davinci-003'
 
     response1 = openai.Completion.create(
         engine=model_engine,
@@ -103,6 +104,7 @@ def generate_job_description():
         n=1,
         stop=None
         )
+
 
 
     # Extract generated job description from API response
