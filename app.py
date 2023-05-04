@@ -4,6 +4,7 @@ import configparser
 from flask import Flask, request, render_template_string, render_template
 import PyPDF2
 import asyncio
+import aiohttp
 
 
 app = Flask(__name__)
@@ -13,7 +14,7 @@ model_engine = 'text-davinci-002'
 async def summarize_text(text):
     response = openai.Completion.create(
         engine=model_engine,
-        prompt= f"Summarize in 1 paragraphs this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
+        prompt= f"Summarize in 100-150 words this resume focusing on the type of companies and projects the person worked, always use the name of the candidate (make sure you share the main technologies used):\n{text}",
         max_tokens=150,
         temperature=0.3,
         n=1,
@@ -24,7 +25,7 @@ async def summarize_text(text):
 async def extract_companies(text):
     companies = openai.Completion.create(
         engine=model_engine,
-        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at. This is the resume: \n{text}",
+        prompt=f"Based on the following Resume, can you list the main companies this candidate worked at and from what year he started to what year he left. Do not use They, only refer to the candidate by their name. This is the resume: \n{text}",
         max_tokens= 80,
         temperature=0.3,
         n=1,
@@ -35,8 +36,8 @@ async def extract_companies(text):
 async def extract_company_type(companies):
     response = openai.Completion.create(
         engine=model_engine,
-        prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company : what they do\n",
-        max_tokens= 80,
+        prompt=f" Based on this list of companies: \n{companies}\n Can you tell me what these companies do. Use the following structure: \n Name of company (years he worked there): what they do\n",
+        max_tokens= 150,
         temperature=0.2,
         n=1,
         stop=None
@@ -79,13 +80,27 @@ async def upload_file():
     return render_template("1summarizer.html")
 
 
+model_engine = 'text-davinci-003'
 
-@app.route('/JDGenerator')
-def index():
-    return render_template('2testgenerator.html')
+async def generate_job_description(input1, input2, input3, input4, input5):
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+                'https://api.openai.com/v1/engines/text-davinci-003/completions',
+                headers={'Authorization': f'Bearer {openai.api_key}'},
+                json={
+                    'prompt': f"Generate a FULL job description with the following requirements and structure, Remote or Relocation: \n{input1} Job Title: \n {input2} Must Have: \n {input3} Good to Have: \n{input4} Years of Experience: \n{input5}, please use this structure: Remote or Relocation opportunity: Explain if this a a remote or relocation opportunity -Job Title: Clearly state the title of the position, which should accurately reflect the role and responsibilities of the job. -Overview: Provide a brief summary of the job, including its purpose and how it fits within the organization. -Responsibilities: List the main tasks, duties, and responsibilities of the role. Use bullet points to make it easy to read and understand. Include both the day-to-day tasks and any larger projects or initiatives the employee will be responsible for. -Qualifications: Outline must haves and good to haves qualifications for the job. This may include experience, skills, certifications, and any other relevant qualifications necessary to perform the job successfully. -Company Culture and Values: Briefly describe the company's culture and values, and how they align with the expectations for the role.",
+                    'max_tokens': 3700,
+                    'temperature': 1.3,
+                    'n': 1,
+                    'stop': None
+                }
+        ) as response:
+            response = await response.json()
+            job_description = response['choices'][0]['text'].strip()
+            return job_description
 
 @app.route('/JDGenerator', methods=['POST'])
-def generate_job_description():
+async def generate_job_description_handler():
     # Get input values from form
     input1 = request.form['input1']
     input2 = request.form['input2']
@@ -93,27 +108,14 @@ def generate_job_description():
     input4 = request.form['input4']
     input5 = request.form['input5']
 
-    # Make API request to ChatGPT API
-    model_engine = 'text-davinci-003'
-
-    response1 = openai.Completion.create(
-        engine=model_engine,
-        prompt=f"Generate a FULL job description with the following requirements and structure, Remote or Relocation: \n{input1} Job Title: \n {input2} Must Have: \n {input3} Good to Have: \n{input4} Years of Experience: \n{input5}, please use this structure: Remote or Relocation opportunity: Explain if this a a remote or relocation opportunity -Job Title: Clearly state the title of the position, which should accurately reflect the role and responsibilities of the job. -Overview: Provide a brief summary of the job, including its purpose and how it fits within the organization. -Responsibilities: List the main tasks, duties, and responsibilities of the role. Use bullet points to make it easy to read and understand. Include both the day-to-day tasks and any larger projects or initiatives the employee will be responsible for. -Qualifications: Outline must haves and good to haves qualifications for the job. This may include experience, skills, certifications, and any other relevant qualifications necessary to perform the job successfully. -Company Culture and Values: Briefly describe the company's culture and values, and how they align with the expectations for the role. -Equal Opportunity Employer Statement: Include a statement indicating that the company is an equal opportunity employer and does not discriminate based on race, color, religion, sex, sexual orientation, gender identity, national origin, age, disability, or any other protected status. ",
-        max_tokens=3700,
-        temperature=1.3,
-        n=1,
-        stop=None
-        )
-
-
-
-    # Extract generated job description from API response
-    job_description = response1.choices[0].text.strip()
-
-
+    # Make asynchronous API request to OpenAI
+    job_description = await generate_job_description(input1, input2, input3, input4, input5)
 
     return render_template('2testgeneratorresult.html', job_description=job_description)
 
+@app.route('/JDGenerator')
+def index():
+    return render_template('2testgenerator.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
