@@ -211,13 +211,48 @@
 		
 				<p class="text-justify"> With this app, you can quickly and easily upload PDF resumes from potential candidates and have them automatically summarized into a concise, yet informative overview of their qualifications. Using advanced natural language processing algorithms, the app can extract key information such as education, work experience, technical skills, and achievements, presenting it in a format that's easy to read and understand. This can save you time and help you identify the most promising candidates for your tech roles. By streamlining your hiring process with a resume summarization app, you can make your recruitment efforts more efficient and effective.</p>
 		
-				<form method="post" enctype="multipart/form-data">
+				<form method="post" enctype="multipart/form-data" id="upload-form">
 					<div class="custom-file mb-3">
 						<input type="file" class="form-control" name="pdf_file" id="pdf_file_input">
 						<label class="custom-file-label" for="pdf_file_input" cursor="pointer">Upload your Resume here</label>
 					</div>
-					<input type="submit" class="btn btn-primary btn-lg btn-gray" value="Summarize">
-				  </form>
+					<input type="button" class="btn btn-primary btn-lg btn-gray" value="Summarize" onclick="summarize(this)">
+					<span id="loading-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+				</form>
+				
+				<script>
+					function summarize(button) {
+					const form = document.getElementById('upload-form');
+					const formData = new FormData(form);
+
+					const xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function() {
+						if (xhr.readyState === XMLHttpRequest.DONE) {
+						if (xhr.status === 200) {
+							const response = JSON.parse(xhr.responseText);
+							document.getElementById('summary').value = response.summary;
+							document.getElementById('companytype').value = response.companytype;
+						} else {
+							console.error(xhr.statusText);
+						}
+						// Restore the button text and hide the loading spinner
+						button.value = 'Summarize';
+						button.disabled = false;
+						const spinner = button.nextElementSibling;
+						spinner.classList.add('d-none');
+						}
+					};
+					
+					// Change the button text and show the loading spinner
+					button.value = 'Summarizing';
+					button.disabled = true;
+					const spinner = button.nextElementSibling;
+					spinner.classList.remove('d-none');
+
+					xhr.open('POST', '/');
+					xhr.send(formData);
+					}
+				</script>
 				  <script>
 					const fileInput = document.getElementById('pdf_file_input');
 					const fileLabel = fileInput.nextElementSibling;
@@ -236,7 +271,7 @@
 			  <div class="px-4 py-5 my-5 text-center overflow-hidden shadow-lg">
 				<h1 class="display-4 fw-bold lh-1">Summarized Resume</h1>
 				<div class="form-floating">
-					<textarea class="form-control mt-3" id="summary" placeholder="Product/Consulting experience" style="height: 150px">{{ companytype }}</textarea>	
+					<textarea class="form-control mt-3" id="companytype" placeholder="Product/Consulting experience" style="height: 150px">{{ companytype }}</textarea>	
 					<textarea class="form-control mt-5" id="summary" placeholder="Your summary will be shown here" style="height: 200px">{{ summary }}</textarea>
 					<input type="submit" class="btn btn-primary btn-lg btn-gray mt-5" onclick="location.reload()" value="Generate Again">
 

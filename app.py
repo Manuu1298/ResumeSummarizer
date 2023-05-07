@@ -5,8 +5,9 @@ from flask import Flask, request, render_template_string, render_template
 import PyPDF2
 import asyncio
 import aiohttp
+from flask import jsonify
 
-
+ 
 app = Flask(__name__)
 openai.api_key = "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"
 model_engine = 'text-davinci-002'
@@ -49,13 +50,13 @@ async def upload_file():
     if request.method == 'POST':
         # Check if file is uploaded
         if 'pdf_file' not in request.files:
-            return "No file found", 400
+            return jsonify({'error': 'No file found'}), 400
 
         pdf_file = request.files['pdf_file']
 
         # Check if file is PDF
         if not pdf_file.filename.endswith('.pdf'):
-            return "Invalid file format. Please upload a PDF file.", 400
+            return jsonify({'error': 'Invalid file format. Please upload a PDF file.'}), 400
 
         # Read PDF file and extract text
         pdf_reader = PyPDF2.PdfFileReader(pdf_file)
@@ -74,8 +75,8 @@ async def upload_file():
 
         companytype = await extract_company_type(companies)
 
-        # Render summarized text in HTML format
-        return render_template("1summarizer.html", summary=summary, companytype=companytype)
+        # Return JSON response
+        return jsonify({'summary': summary, 'companytype': companytype})
 
     return render_template("1summarizer.html")
 
