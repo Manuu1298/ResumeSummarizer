@@ -212,7 +212,7 @@
       </div>
 	  
       <div class="overflow-hidden mx-auto" style="max-height: 500vh;" >
-        <form class="spacing" action="/JDGenerator" method="post" style="text-align: center;">
+        <form id="job-description-form" class="spacing" style="text-align: center;">
           <label for="input1">Remote or Relocation:</label>
           <input class="spacing mx-auto" type="text" id="input1" name="input1" required><br>
           <label for="input2">Job Title:</label>
@@ -223,12 +223,45 @@
           <input class="spacing" type="text" id="input4" name="input4" required><br>
           <label for="input5">Years of Experience:</label>
           <input class="spacing" type="text" id="input5" name="input5" required><br>
-          <input class="custom-button" type="submit" value="Generate Job Description">
+          <button class="custom-button" type="button" onclick="generateJobDescription()">Generate Job Description</button>
         </form>
+		<script>
+			function generateJobDescription() {
+			  // Get input values from form
+			  const input1 = document.getElementById('input1').value;
+			  const input2 = document.getElementById('input2').value;
+			  const input3 = document.getElementById('input3').value;
+			  const input4 = document.getElementById('input4').value;
+			  const input5 = document.getElementById('input5').value;
+			
+			  // Send Ajax request to server
+			  const xhr = new XMLHttpRequest();
+			  xhr.open('POST', '/JDGenerator');
+			  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+			  xhr.onload = function() {
+				if (xhr.status === 200) {
+				  // Update job description text area with response text
+				  const jobDescription = JSON.parse(xhr.responseText).job_description;
+				  document.getElementById('JDGenerator').value = jobDescription;
+				}
+			  };
+			  xhr.send(JSON.stringify({input1, input2, input3, input4, input5}));
+			}
+			</script>
+      </div>
       </div>
     </div>
-  </div>
+	<div class="container px-4 my-2 text-center mx-auto">
+		<div class="px-4 py-5 my-5 text-center overflow-hidden shadow-lg">
+			<h1 class="display-4 fw-bold lh-1">Job Description</h1>
+			<div class="form-floating">
+				<textarea class="form-control mx-auto" id="JDGenerator" style="width: 800px; height: 800px;">{{ job_description }}</textarea>
+				<input type="submit" class="btn btn-primary btn-lg mt-5" onclick="location.reload()" value="Generate Again">
+			</div>
+		</div>
+	</div>
 </body>
+
 
 
 	<!-- Optional JavaScript -->

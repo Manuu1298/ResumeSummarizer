@@ -102,17 +102,18 @@ async def generate_job_description(input1, input2, input3, input4, input5):
 
 @app.route('/JDGenerator', methods=['POST'])
 async def generate_job_description_handler():
-    # Get input values from form
-    input1 = request.form['input1']
-    input2 = request.form['input2']
-    input3 = request.form['input3']
-    input4 = request.form['input4']
-    input5 = request.form['input5']
+    # Get input values from request JSON
+    input1 = request.json['input1']
+    input2 = request.json['input2']
+    input3 = request.json['input3']
+    input4 = request.json['input4']
+    input5 = request.json['input5']
 
     # Make asynchronous API request to OpenAI
     job_description = await generate_job_description(input1, input2, input3, input4, input5)
 
-    return render_template('2testgeneratorresult.html', job_description=job_description)
+    # Return job description as JSON response
+    return jsonify(job_description=job_description)
 
 @app.route('/JDGenerator')
 def index():
