@@ -5,6 +5,7 @@ from flask import Flask, request, render_template_string, render_template
 import PyPDF2
 import asyncio
 import aiohttp
+import pika
 from flask import jsonify
 
  
@@ -45,6 +46,31 @@ async def extract_company_type(companies):
     )
     return response.choices[0].text.strip()
 
+def send_task_to_rabbitmq(task):
+    # Connect to RabbitMQ and send a message containing the task
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue='task_queue', durable=True)
+    channel.basic_publish(
+        exchange='',
+        routing_key='task_queue',
+        body=task,
+        properties=pika.BasicProperties(delivery_mode=2) # Make the message persistent
+    )
+    connection.close()
+
+def consume_task_from_rabbitmq():
+    # Connect to RabbitMQ and consume tasks from the queue
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue='task_queue', durable=True)
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(queue='task_queue', on_message_callback=process_task)
+    channel.start_consuming()
+
+
+app = Flask(__name__)
+
 @app.route('/', methods=['GET', 'POST'])
 async def upload_file():
     if request.method == 'POST':
@@ -80,6 +106,14 @@ async def upload_file():
 
     return render_template("1summarizer.html")
 
+if __name__ == '__main__':
+    # Start the task consumer in a separate thread
+    import threading
+    t = threading.Thread(target=consume_task_from_rabbitmq)
+    t.start()
+
+    # Start the Flask application
+    app.run()
 
 model_engine = 'text-davinci-003'
 
