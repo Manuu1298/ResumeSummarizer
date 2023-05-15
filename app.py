@@ -10,7 +10,7 @@ from flask import jsonify
 
  
 app = Flask(__name__)
-openai.api_key = "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"
+openai.api_key = "xxxxxx"
 model_engine = 'text-davinci-002'
 
 async def summarize_text(text):
